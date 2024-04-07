@@ -178,6 +178,17 @@ export class AuthService {
     return { success: true };
   }
 
+  /**
+   * Logout
+   */
+  async logout({ id }: UserDto): Promise<SuccessDto> {
+    await this.prismaService.users.updateMany({
+      where: { id },
+      data: { refreshToken: null },
+    });
+    return { success: true };
+  }
+
   /* Create Code */
   private createCode(): string {
     let code = '';

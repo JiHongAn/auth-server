@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { SuccessDto } from '../../libs/dtos/success.dto';
 import { RegisterDto } from '../dtos/register.dto';
@@ -6,6 +6,9 @@ import { RequestEmailDto } from '../dtos/request-email.dto';
 import { VerifyEmailDto } from '../dtos/verify-email.dto';
 import { LoginDto, LoginResponseDto } from '../dtos/login.dto';
 import { RefreshDto, RefreshResponseDto } from '../dtos/refresh.dto';
+import { JwtGuard } from '../guards/jwt.guard';
+import { UserDto } from '../../libs/dtos/user.dto';
+import { GetUser } from '../../libs/decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -34,5 +37,11 @@ export class AuthController {
   @Post('verify-email')
   async verifyEmail(@Body() params: VerifyEmailDto): Promise<SuccessDto> {
     return this.authService.verifyEmail(params);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtGuard)
+  async logout(@GetUser() user: UserDto): Promise<SuccessDto> {
+    return this.authService.logout(user);
   }
 }
