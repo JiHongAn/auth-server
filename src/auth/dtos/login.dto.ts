@@ -1,9 +1,9 @@
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 import { RefreshResponseDto } from './refresh.dto';
 
 export class LoginDto {
-  @IsEmail()
-  email: string;
+  @IsString()
+  id: string;
 
   @IsString()
   @Length(5, 30)

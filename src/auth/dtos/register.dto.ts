@@ -1,6 +1,9 @@
 import { IsEmail, IsString, Length } from 'class-validator';
 
 export class RegisterDto {
+  @IsString()
+  id: string;
+
   @IsEmail()
   email: string;
 
