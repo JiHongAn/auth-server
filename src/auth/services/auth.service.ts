@@ -22,12 +22,11 @@ export class AuthService {
   /**
    * Login
    */
-  async login({ email, password }: LoginDto): Promise<LoginResponseDto> {
+  async login({ id, password }: LoginDto): Promise<LoginResponseDto> {
     const user = await this.prismaService.users.findUnique({
-      where: { email },
+      where: { id },
       select: {
         id: true,
-        email: true,
         nickname: true,
         password: true,
         profileUrl: true,
@@ -98,19 +97,31 @@ export class AuthService {
    * Register
    */
   async register({
+    id,
     email,
     password,
     nickname,
     code,
   }: RegisterDto): Promise<SuccessDto> {
-    const user = await this.prismaService.users.findUnique({
+    const verifyEmail = await this.prismaService.users.findUnique({
       where: { email },
       select: { email: true },
     });
 
     // 이미 이메일 가입 정보가 존재하는 경우
-    if (user) {
+    if (verifyEmail) {
       throw errors.FailedRegister('중복된 이메일이 존재합니다');
+    }
+
+    // 아이디 체크
+    const verifyId = await this.prismaService.users.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    // 이미 아이디 가입 정보가 존재하는 경우
+    if (verifyId) {
+      throw errors.FailedRegister('중복된 아이디가 존재합니다');
     }
 
     // 이메일 인증
@@ -121,7 +132,7 @@ export class AuthService {
 
     // User 생성
     await this.prismaService.users.createMany({
-      data: { email, nickname, password: hashedPassword },
+      data: { id, email, nickname, password: hashedPassword },
     });
     return { success: true };
   }
@@ -205,7 +216,7 @@ export class AuthService {
   }
 
   /* RefreshToken 생성 */
-  private async createRefreshToken(id: number): Promise<string> {
+  private async createRefreshToken(id: string): Promise<string> {
     // payload
     const payload = { id };
 
@@ -226,7 +237,7 @@ export class AuthService {
   }
 
   /* Refresh Token 검증 */
-  private validateRefreshToken(token: string): { id: number } {
+  private validateRefreshToken(token: string): { id: string } {
     try {
       const payload = this.jwtService.verify(token);
       return { id: payload.id };

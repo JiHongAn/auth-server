@@ -34,15 +34,12 @@ export class UsersService {
   /**
    * Get User By Ids
    */
-  async getUserByIds(
-    user: UserDto,
-    { userIds }: GetUserByIdDto,
-  ): Promise<UserDto[]> {
+  async getUserByIds({ userIds }: GetUserByIdDto): Promise<UserDto[]> {
     const splitIds = userIds.split(',');
 
-    const users = await this.prismaService.users.findMany({
+    return this.prismaService.users.findMany({
       where: {
-        id: { in: splitIds.map((id) => +id) },
+        id: { in: splitIds.map((id) => id) },
       },
       select: {
         id: true,
@@ -50,6 +47,5 @@ export class UsersService {
         profileUrl: true,
       },
     });
-    return users;
   }
 }

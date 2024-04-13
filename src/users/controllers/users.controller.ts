@@ -25,10 +25,7 @@ export class UsersController {
 
   @Get('ids')
   @UseGuards(JwtGuard)
-  async getUserByIds(
-    @GetUser() user: UserDto,
-    @Query() params: GetUserByIdDto,
-  ): Promise<UserDto[]> {
-    return this.usersService.getUserByIds(user, params);
+  async getUserByIds(@Query() params: GetUserByIdDto): Promise<UserDto[]> {
+    return this.usersService.getUserByIds(params);
   }
 }
