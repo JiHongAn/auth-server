@@ -4,7 +4,7 @@ import { RequestEmailDto } from '../dtos/request-email.dto';
 import { VerifyEmailDto } from '../dtos/verify-email.dto';
 import { SuccessDto } from '../../libs/dtos/success.dto';
 import { PrismaService } from '../../prisma/services/prisma.service';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { addEmailSQS } from '../../libs/utils/sqs';
 import { errors } from '../../libs/errors';
 import { LoginDto, LoginResponseDto } from '../dtos/login.dto';
