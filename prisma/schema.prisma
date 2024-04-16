@@ -1,0 +1,31 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id            String        @id @db.VarChar(12)
+  email         String        @unique @db.VarChar(30)
+  password      String        @db.VarChar(20)
+  nickname      String        @db.VarChar(10)
+  profileUrl    String?       @db.VarChar(200)
+  refreshToken  String?       @db.VarChar(200)
+  createdAt     DateTime      @default(now())
+  emailVerifies emailVerifies @relation(fields: [email], references: [email])
+
+  @@map("user")
+}
+
+model emailVerifies {
+  email     String   @id @db.VarChar(20)
+  code      String   @db.VarChar(10)
+  expiresAt DateTime
+  users     users[]
+
+  @@map("email_verify")
+}
