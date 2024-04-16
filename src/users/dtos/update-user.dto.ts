@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, Length } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -7,5 +7,6 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsString()
+  @Length(3, 10)
   nickname?: string;
 }
