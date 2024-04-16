@@ -4,7 +4,6 @@ import { GetUser } from '../../libs/decorators/get-user.decorator';
 import { UserDto } from '../../libs/dtos/user.dto';
 import { JwtGuard } from '../../auth/guards/jwt.guard';
 import { SuccessDto } from '../../libs/dtos/success.dto';
-import { GetUserResponseDto } from '../dtos/get-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Controller('users')
@@ -13,8 +12,8 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtGuard)
-  async getUser(@GetUser() user: UserDto): Promise<GetUserResponseDto> {
-    return this.usersService.getUser(user);
+  async getUser(@GetUser() user: UserDto): Promise<UserDto> {
+    return user;
   }
 
   @Patch()
