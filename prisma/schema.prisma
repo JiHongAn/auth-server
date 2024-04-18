@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["linux-arm64-openssl-3.0.x"]
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,8 +10,8 @@ datasource db {
 
 model users {
   id            String        @id @db.VarChar(12)
-  email         String        @unique @db.VarChar(30)
-  password      String        @db.VarChar(20)
+  email         String        @unique @db.VarChar(60)
+  password      String        @db.VarChar(200)
   nickname      String        @db.VarChar(10)
   profileUrl    String?       @db.VarChar(200)
   refreshToken  String?       @db.VarChar(200)
@@ -22,10 +22,10 @@ model users {
 }
 
 model emailVerifies {
-  email     String   @id @db.VarChar(20)
+  email     String   @id @db.VarChar(60)
   code      String   @db.VarChar(10)
   expiresAt DateTime
-  users     users[]
+  users     users?
 
   @@map("email_verify")
 }
