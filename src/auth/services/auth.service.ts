@@ -148,7 +148,7 @@ export class AuthService {
 
     // 이미 이메일 가입 정보가 존재하는 경우
     if (user) {
-      throw errors.FailedRegister('중복된 이메일이 존재합니다');
+      throw errors.FailedRegister('해당 이메일로 가입된 계정이 존재합니다');
     }
 
     // 인증 코드 생성
@@ -184,7 +184,7 @@ export class AuthService {
 
     // 이메일 인증이 유효하지 않다면
     if (!isValid || isValid.expiresAt.getTime() < baseTime.getTime()) {
-      throw errors.FailedRegister();
+      throw errors.FailedRegister('인증 코드를 확인해주세요');
     }
     return { success: true };
   }

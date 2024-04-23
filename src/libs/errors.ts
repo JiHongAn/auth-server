@@ -26,7 +26,7 @@ export const errors = {
   /**
    * Auth 에러
    * */
-  FailedLogin(message = '로그인에 실패했습니다') {
+  FailedLogin(message = '아이디나 비밀번호를 확인해주세요') {
     return new ChoconutException(400, -101, message);
   },
   FailedRegister(message = '회원가입에 실패했습니다') {
