@@ -44,13 +44,15 @@ export class AuthService {
       throw errors.FailedLogin();
     }
 
-    // Token 발급
+    // Access Token
     const accessToken = this.createAccessToken({
       id: user.id,
-      nickname: user.nickname,
-      profileUrl: user.profileUrl,
     });
-    const refreshToken = await this.createRefreshToken(user.id);
+
+    // Refresh Token
+    const refreshToken = await this.createRefreshToken({
+      id: user.id,
+    });
     return { accessToken, refreshToken };
   }
 
@@ -81,12 +83,12 @@ export class AuthService {
     // 새로운 Access Token
     const newAccessToken = this.createAccessToken({
       id: user.id,
-      nickname: user.nickname,
-      profileUrl: user.profileUrl,
     });
 
     // 새로운 Refresh Token
-    const newRefreshToken = await this.createRefreshToken(user.id);
+    const newRefreshToken = await this.createRefreshToken({
+      id: user.id,
+    });
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
@@ -216,7 +218,7 @@ export class AuthService {
   }
 
   /* RefreshToken 생성 */
-  private async createRefreshToken(id: string): Promise<string> {
+  private async createRefreshToken({ id }: UserDto): Promise<string> {
     // payload
     const payload = { id };
 
