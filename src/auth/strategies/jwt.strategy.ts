@@ -15,13 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: any): UserDto {
-    if (!payload.id || !payload.nickname) {
+    if (!payload.id) {
       throw errors.InvalidAccessToken();
     }
-    return {
-      id: payload.id,
-      nickname: payload.nickname,
-      profileUrl: payload?.profileUrl,
-    };
+    return { id: payload.id };
   }
 }
